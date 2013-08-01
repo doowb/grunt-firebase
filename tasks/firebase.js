@@ -1,8 +1,8 @@
 /*
  * grunt-firebase
- * https://github.com/upstage/grunt-firebase
+ * https://github.com/assemble/grunt-firebase
  *
- * Copyright (c) 2013 Upstage
+ * Copyright (c) 2013 Assemble
  * Licensed under the MIT license.
  */
 
