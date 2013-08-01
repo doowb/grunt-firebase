@@ -1,22 +1,33 @@
 {
   "name": "grunt-firebase",
   "description": "Update your firebase data from a Grunt task!",
-  "version": "0.1.0",
-  "homepage": "https://github.com/upstage/grunt-firebase",
+  "version": "0.1.1",
+  "homepage": "https://github.com/assemble/grunt-firebase",
   "author": {
-    "name": "Upstage"
+    "name": "assemble",
+    "url": "https://github.com/assemble/assemble"
   },
+  "contributors": [
+    {
+      "name": "Brian Woodward",
+      "url": "https://github.com/doowb"
+    },
+    {
+      "name": "Jon Schlinkert",
+      "url": "https://github.com/jonschlinkert"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/upstage/grunt-firebase.git"
+    "url": "git://github.com/assemble/grunt-firebase.git"
   },
   "bugs": {
-    "url": "https://github.com/upstage/grunt-firebase/issues"
+    "url": "https://github.com/assemble/grunt-firebase/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/upstage/grunt-firebase/blob/master/LICENSE-MIT"
+      "url": "https://github.com/assemble/grunt-firebase/blob/master/LICENSE-MIT"
     }
   ],
   "main": "Gruntfile.js",
@@ -36,7 +47,9 @@
     "grunt": "~0.4.1"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "firebase",
+    "assemble"
   ],
   "dependencies": {
     "firebase": "~0.6.1",
