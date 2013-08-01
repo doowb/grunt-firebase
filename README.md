@@ -25,59 +25,97 @@ In your project's Gruntfile, add a section named `firebase` to the data object p
 ```js
 grunt.initConfig({
   firebase: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
+      options: {
+        //
+        // reference to start with (full firebase url)
+        //
+        reference: 'https://myfirebase.firebaseio.com/demo',
+
+        //
+        // token is the secret key used for connecting to firebase from the server
+        // this is redacted from the public repo... add a file called ./config/auth.json
+        // with your token in it... { "token": "my token here" }
+        //
+        token: '<%= authConfig.token %>'
+      },
+      load: {
+        options: {
+          data: {
+            one: {
+              foo: 'bar'
+            },
+            two: [
+              { a: 'A' },
+              { b: 'B' },
+              { c: 'C' }
+            ],
+            three: [ 'first', 'second', 'third' ]
+          }
+        }
+      }
   },
 })
 ```
 
 ### Options
 
-#### options.separator
+#### options.reference
+Type: `string`
+Require: true
+
+reference to start with (full firebase url)
+
+#### options.token
 Type: `String`
-Default value: `',  '`
+Require: true
 
-A string value that is used to do something with whatever.
+token is the secret key used for connecting to firebase from the server
+this is redacted from the public repo... add a file called ./config/auth.json
+with your token in it... { "token": "my token here" }
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+#### options.data
+Type: `String | Object | Array`
 
-A string value that is used to do something else with whatever else.
+This is the data that will be loaded into firebase at the specified reference point.
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
 ```js
-grunt.initConfig({
-  firebase: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-})
-```
+var authConfig = grunt.file.readJSON('./config/auth.json');
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
 grunt.initConfig({
+  
+  authConfig: authConfig,
+
   firebase: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+      options: {
+        //
+        // reference to start with (full firebase url)
+        //
+        reference: 'https://myfirebase.firebaseio.com/demo',
+
+        //
+        // token is the secret key used for connecting to firebase from the server
+        // this is redacted from the public repo... add a file called ./config/auth.json
+        // with your token in it... { "token": "my token here" }
+        //
+        token: '<%= authConfig.token %>'
+      },
+      load: {
+        options: {
+          data: {
+            one: {
+              foo: 'bar'
+            },
+            two: [
+              { a: 'A' },
+              { b: 'B' },
+              { c: 'C' }
+            ],
+            three: [ 'first', 'second', 'third' ]
+          }
+        }
+      }
   },
 })
 ```
