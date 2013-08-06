@@ -11,6 +11,7 @@
 module.exports = function(grunt) {
 
   var _ = require('lodash');
+  var path = require('path');
   var Firebase = require('firebase');
 
   var validation = {
@@ -36,12 +37,11 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('firebase', 'Update your firebase.', function() {
     
-    var done = this.async();
+    var task = this;
+    var done = task.async();
 
     // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      data: {}
-    });
+    var options = task.options({});
 
     validateOptions(options, function(errs, valid) {
       if(errs) {
@@ -63,7 +63,18 @@ module.exports = function(grunt) {
       }
 
       // update firebase with the data
-      ref.update(options.data);
+      if(options.data) {
+        ref.update(options.data);
+      }
+
+      // for each file, update the firebase using the filename as the key
+      task.filesSrc.forEach(function(filepath) {
+        if(grunt.file.exists(filepath)) {
+          var filename = path.basename(filepath, path.extname(filepath));
+          var data = grunt.file.readJSON(filepath);
+          ref.child(filename).update(data);
+        }
+      });
 
       done();
 
