@@ -88,34 +88,68 @@ grunt.initConfig({
   authConfig: authConfig,
 
   firebase: {
-      options: {
-        //
-        // reference to start with (full firebase url)
-        //
-        reference: 'https://myfirebase.firebaseio.com/demo',
+    options: {
+      //
+      // reference to start with (full firebase url)
+      //
+      reference: 'https://myfirebase.firebaseio.com/demo',
 
-        //
-        // token is the secret key used for connecting to firebase from the server
-        // this is redacted from the public repo... add a file called ./config/auth.json
-        // with your token in it... { "token": "my token here" }
-        //
-        token: '<%= authConfig.token %>'
-      },
-      load: {
-        options: {
-          data: {
-            one: {
-              foo: 'bar'
-            },
-            two: [
-              { a: 'A' },
-              { b: 'B' },
-              { c: 'C' }
-            ],
-            three: [ 'first', 'second', 'third' ]
-          }
+      //
+      // token is the secret key used for connecting to firebase from the server
+      // this is redacted from the public repo... add a file called ./config/auth.json
+      // with your token in it... { "token": "my token here" }
+      //
+      token: '<%= authConfig.token %>'
+    },
+    load: {
+      options: {
+        data: {
+          one: {
+            foo: 'bar'
+          },
+          two: [
+            { a: 'A' },
+            { b: 'B' },
+            { c: 'C' }
+          ],
+          three: [ 'first', 'second', 'third' ]
         }
       }
+    }
+  },
+})
+```
+
+You don't want to put your data in the Gruntfile?!?! Why not?
+
+Okay... just put it in some `.json` files and tell the task where to find them. We'll handle importing the data and uploading it to firebase for you:
+
+```js
+var authConfig = grunt.file.readJSON('./config/auth.json');
+
+grunt.initConfig({
+  
+  authConfig: authConfig,
+
+  firebase: {
+    options: {
+      //
+      // reference to start with (full firebase url)
+      //
+      reference: 'https://myfirebase.firebaseio.com/demo',
+
+      //
+      // token is the secret key used for connecting to firebase from the server
+      // this is redacted from the public repo... add a file called ./config/auth.json
+      // with your token in it... { "token": "my token here" }
+      //
+      token: '<%= authConfig.token %>'
+    },
+    load: {
+      files: [
+        { src: './path/to/my/data/**/*.json' }
+      ]
+    }
   },
 })
 ```

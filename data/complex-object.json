@@ -1,0 +1,19 @@
+{
+	"people": [
+		{
+			"name": {
+				"first": "Brian",
+				"last": "Woodward"
+			},
+			"addresses": [
+				{
+					"address1": "123 Main Street",
+					"address2": "A",
+					"city": "Sharonville",
+					"state": "OH",
+					"zip": "45241"
+				}
+			]
+		}
+	]
+}
