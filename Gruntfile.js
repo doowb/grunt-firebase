@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     firebase: {
       options: {
         // reference to start with (full firebase url)
-        reference: 'https://quick-todos.firebaseio.com/test',
+        reference: 'https://grunt-firebase.firebaseio.com/test',
         // token is the secret key used for connecting to firebase from the server
         // this is redacted from the public repo... add a file called ./config/auth.json
         // with your token in it... { "token": "my token here" }
@@ -57,8 +57,14 @@ module.exports = function(grunt) {
           }
         }
       },
-      fromFiles: {
+      upload: {
         files: [{ src: './data/*.json' }]
+      },
+      download: {
+        options: {
+          mode: 'download',
+          dest: './data/downloads/'
+        }
       }
     }
 
