@@ -35,23 +35,7 @@ module.exports = function(grunt) {
     }
   };
 
-  grunt.registerMultiTask('firebase', 'Update your firebase.', function() {
-    
-    var task = this;
-    var done = task.async();
-
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = task.options({});
-
-    validateOptions(options, function(errs, valid) {
-      if(errs) {
-        errs.forEach(function(err) {
-          grunt.warn('options.' + err.option + ' undefined: ' + err.msg);
-        });
-        done(false);
-      }
-    });
-
+  var upload = function(task, options, done) {
     // create a new firebase reference using the reference url
     var ref = new Firebase(options.reference);
 
@@ -79,6 +63,69 @@ module.exports = function(grunt) {
       done();
 
     });
+
+  };
+
+  var download = function(task, options, done) {
+    // create a new firebase reference using the reference url
+    var ref = new Firebase(options.reference);
+
+    var dest = options.dest || ('./');
+    var filename = (options.reference.split('/')[options.reference.split('/').length -1 ]);
+    var ext = path.extname(filename) || '.json';
+    var output = path.join(dest, filename) + ext;
+
+    // authenticate to firebase with the token
+    ref.auth(options.token, function(err, result) {
+      if(err) {
+        grunt.warn('Firebase login failed: ', err);
+        done(false);
+      }
+
+      // download to the destination
+      grunt.log.writeln(('Downloading to ' + output).cyan);
+      ref.on('value', function(snapshot) {
+        var data = snapshot.val();
+        grunt.file.write(output, JSON.stringify(data, null, 2));
+        done();
+      });
+
+    });
+ 
+  };
+
+  grunt.registerMultiTask('firebase', 'Update your firebase.', function() {
+    
+    var task = this;
+    var done = task.async();
+
+    // Merge task-specific and/or target-specific options with these defaults.
+    var options = task.options({
+      mode: 'upload'
+    });
+
+    validateOptions(options, function(errs, valid) {
+      if(errs) {
+        errs.forEach(function(err) {
+          grunt.warn('options.' + err.option + ' undefined: ' + err.msg);
+        });
+        done(false);
+      }
+    });
+
+    switch(options.mode.toLowerCase()) {
+      case 'upload':
+        upload(task, options, done);
+        break;
+      case 'download':
+        download(task, options, done);
+        break;
+      case 'live':
+        break;
+      default:
+        upload(task, options, done);
+        break;
+    }
 
   });
 
