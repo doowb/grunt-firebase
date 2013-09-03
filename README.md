@@ -29,7 +29,7 @@ grunt.initConfig({
         //
         // reference to start with (full firebase url)
         //
-        reference: 'https://myfirebase.firebaseio.com/demo',
+        reference: 'https://grunt-firebase.firebaseio.com/demo',
 
         //
         // token is the secret key used for connecting to firebase from the server
@@ -53,8 +53,8 @@ grunt.initConfig({
           }
         }
       }
-  },
-})
+  }
+});
 ```
 
 ### Options
@@ -78,6 +78,23 @@ Type: `String | Object | Array`
 
 This is the data that will be loaded into firebase at the specified reference point.
 
+#### options.mode
+Type: `String`
+Required: false
+Default: `upload`
+
+Specify if you want to upload or download your data from firebase.
+If `download` is specified, add a `dest` to your options to determine where
+the data file will go.
+
+### options.dest
+Type: `String`
+Required: false
+Default: `./`
+
+Used when `mode: download` is set in the options. This is the base path for
+which the downloaded file will go.
+
 ### Usage Examples
 
 ```js
@@ -92,7 +109,7 @@ grunt.initConfig({
       //
       // reference to start with (full firebase url)
       //
-      reference: 'https://myfirebase.firebaseio.com/demo',
+      reference: 'https://grunt-firebase.firebaseio.com/demo',
 
       //
       // token is the secret key used for connecting to firebase from the server
@@ -116,8 +133,8 @@ grunt.initConfig({
         }
       }
     }
-  },
-})
+  }
+});
 ```
 
 You don't want to put your data in the Gruntfile?!?! Why not?
@@ -136,7 +153,7 @@ grunt.initConfig({
       //
       // reference to start with (full firebase url)
       //
-      reference: 'https://myfirebase.firebaseio.com/demo',
+      reference: 'https://grunt-firebase.firebaseio.com/demo',
 
       //
       // token is the secret key used for connecting to firebase from the server
@@ -150,9 +167,48 @@ grunt.initConfig({
         { src: './path/to/my/data/**/*.json' }
       ]
     }
-  },
-})
+  }
+});
 ```
+
+Now that your file is uploaded, make some changes to it through the [Firebase Forge](https://www.firebase.com/)
+and download the updates to your file:
+
+```js
+var authConfig = grunt.file.readJSON('./config/auth.json');
+
+grunt.initConfig({
+  
+  authConfig: authConfig,
+
+  firebase: {
+    options: {
+      //
+      // reference to start with (full firebase url)
+      // when downloading, the final segment in the path
+      // will determine the filename where your data goes
+      //
+      reference: 'https://grunt-firebase.firebaseio.com/demo',
+
+      //
+      // token is the secret key used for connecting to firebase from the server
+      // this is redacted from the public repo... add a file called ./config/auth.json
+      // with your token in it... { "token": "my token here" }
+      //
+      token: '<%= authConfig.token %>'
+    },
+    getMyFiles: {
+      options: {
+        mode: 'download',
+        dest: 'path/to/downloaded/files/'
+      }
+    }
+  }
+});
+```
+This will result in all of your data located at `https://grunt-firebase.firebaseio.com/demo`
+to be downloaded and stored in a file located at `path/to/downloaded/files/demo.json`
+
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
