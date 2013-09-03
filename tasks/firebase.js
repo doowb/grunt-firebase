@@ -71,13 +71,9 @@ module.exports = function(grunt) {
     var ref = new Firebase(options.reference);
 
     var dest = options.dest || ('./');
-    console.log(dest);
     var filename = (options.reference.split('/')[options.reference.split('/').length -1 ]);
-    console.log(filename);
     var ext = path.extname(filename) || '.json';
-    console.log(ext);
     var output = path.join(dest, filename) + ext;
-    console.log(output);
 
     // authenticate to firebase with the token
     ref.auth(options.token, function(err, result) {
@@ -87,7 +83,7 @@ module.exports = function(grunt) {
       }
 
       // download to the destination
-      console.log('downloading to ' + output);
+      grunt.log.writeln(('Downloading to ' + output).cyan);
       ref.on('value', function(snapshot) {
         var data = snapshot.val();
         grunt.file.write(output, JSON.stringify(data, null, 2));

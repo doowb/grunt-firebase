@@ -84,4 +84,9 @@ module.exports = function(grunt) {
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
 
+  // alias specific tasks
+  grunt.registerTask('load', ['clean', 'firebase:load']);
+  grunt.registerTask('upload', ['clean', 'firebase:upload']);
+  grunt.registerTask('download', ['clean', 'firebase:download']);
+
 };
