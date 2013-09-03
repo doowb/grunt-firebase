@@ -65,6 +65,12 @@ module.exports = function(grunt) {
           mode: 'download',
           dest: './data/downloads/'
         }
+      },
+      live: {
+        options: {
+          mode: 'live'
+        },
+        files: [{ src: './data/*.json' }]
       }
     }
 
