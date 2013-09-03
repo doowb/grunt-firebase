@@ -84,10 +84,13 @@ Required: false
 Default: `upload`
 
 Specify if you want to upload or download your data from firebase.
-If `download` is specified, add a `dest` to your options to determine where
-the data file will go.
 
-### options.dest
+##### Modes
+  - `upload`: files in the `files` property will be uploaded to the reference location
+  - `download`: add a `dest` to your options to determine where the data file will go.
+  - `live`: files in the `files` property will be watched and uploaded to firebase when changed or downloaded from firebase when changed remotely.
+
+#### options.dest
 Type: `String`
 Required: false
 Default: `./`
@@ -209,6 +212,48 @@ grunt.initConfig({
 This will result in all of your data located at `https://grunt-firebase.firebaseio.com/demo`
 to be downloaded and stored in a file located at `path/to/downloaded/files/demo.json`
 
+
+By now you might be thinking... "This is all great, but I want to really use Firebase features and collaborate in realtime."
+
+You can!!! Almost... it all depends on your text editor, but there's now a `live mode`!
+Just set the option `mode: live` and tell `grunt-firebase` which files to watch.
+Each file in the glob pattern will be uploaded to the reference path when changed locally,
+and the local file will be updated when changed remotely.
+
+```js
+var authConfig = grunt.file.readJSON('./config/auth.json');
+
+grunt.initConfig({
+  
+  authConfig: authConfig,
+
+  firebase: {
+    options: {
+      //
+      // reference to start with (full firebase url)
+      // this is the root path that will be watched for changes
+      // and each "key" will be it's own file
+      //
+      reference: 'https://grunt-firebase.firebaseio.com/demo',
+
+      //
+      // token is the secret key used for connecting to firebase from the server
+      // this is redacted from the public repo... add a file called ./config/auth.json
+      // with your token in it... { "token": "my token here" }
+      //
+      token: '<%= authConfig.token %>'
+    },
+    getMyFiles: {
+      options: {
+        mode: 'live'
+      },
+      files: [
+        { src: './path/to/my/data/**/*.json' }
+      ]
+    }
+  }
+});
+```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).

@@ -13,6 +13,7 @@ module.exports = function(grunt) {
   var _ = require('lodash');
   var path = require('path');
   var Firebase = require('firebase');
+  var gaze = require('gaze');
 
   var validation = {
     reference: 'Define a firebase URL to upload data to.',
@@ -94,6 +95,55 @@ module.exports = function(grunt) {
  
   };
 
+  var live = function(task, options, done) {
+    // create a new firebase reference using the reference url
+    var ref = new Firebase(options.reference);
+
+    var fileMapping = {};
+    task.filesSrc.forEach(function(filepath) {
+      var filename = path.basename(filepath, path.extname(filepath));
+      fileMapping[filename] = filepath;
+    });
+
+    // authenticate to firebase with the token
+    ref.auth(options.token, function(err, result) {
+      if(err) {
+        grunt.warn('Firebase login failed: ', err);
+        done(false);
+      }
+
+      // for each file, setup live watching
+      gaze(task.filesSrc, function(err, watcher) {
+        if(err) {
+          grunt.warn('Error attempting to watch file: ' + filepath, err);
+          done(false);
+        }
+
+        grunt.log.writeln('Listening for file changes...'.cyan);
+
+        this.on('changed', function(filepath) {
+          grunt.log.writeln((filepath + ' was changed. Uploading to firebase...').cyan);
+          var filename = path.basename(filepath, path.extname(filepath));
+          var data = grunt.file.readJSON(filepath);
+          ref.child(filename).update(data);
+        });
+
+        ref.on('child_changed', function(snapshot) {
+          var name = snapshot.name();
+          grunt.log.writeln((name + ' was changed. Updating file with new data...').cyan);
+          var data = snapshot.val();
+          var filepath = fileMapping[name];
+          if(grunt.file.exists(filepath)) {
+            grunt.file.write(filepath, JSON.stringify(data, null, 2));
+          }
+        });
+
+      });
+
+    });
+
+  };
+
   grunt.registerMultiTask('firebase', 'Update your firebase.', function() {
     
     var task = this;
@@ -113,19 +163,23 @@ module.exports = function(grunt) {
       }
     });
 
+    var func = null;
     switch(options.mode.toLowerCase()) {
       case 'upload':
-        upload(task, options, done);
+        func = upload;
         break;
       case 'download':
-        download(task, options, done);
+        func = download;
         break;
       case 'live':
+        func = live;
         break;
       default:
-        upload(task, options, done);
+        func = upload;
         break;
     }
+
+    func(task, options, done);
 
   });
 
