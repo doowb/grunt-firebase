@@ -66,6 +66,24 @@ module.exports = function(grunt) {
           dest: './data/downloads/'
         }
       },
+      'issue-upload': {
+        options: {
+          data: {
+            issueList: {
+              2: '2^1',
+              4: '2^2',
+              8: '2^3',
+              16: '2^4'
+            }
+          },
+        },
+      },
+      'issue-download': {
+        options: {
+          mode: 'download',
+          dest: './data/downloads/issue/'
+        }
+      },
       live: {
         options: {
           mode: 'live'
@@ -85,7 +103,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'firebase']);
+  grunt.registerTask('test', ['clean', 'firebase:load', 'firebase:upload', 'firebase:download']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
@@ -94,5 +112,7 @@ module.exports = function(grunt) {
   grunt.registerTask('load', ['clean', 'firebase:load']);
   grunt.registerTask('upload', ['clean', 'firebase:upload']);
   grunt.registerTask('download', ['clean', 'firebase:download']);
+
+  grunt.registerTask('issue', ['clean', 'firebase:issue-upload', 'firebase:issue-download']);
 
 };
