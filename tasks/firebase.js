@@ -86,13 +86,13 @@ module.exports = function(grunt) {
       // download to the destination
       grunt.log.writeln(('Downloading to ' + output).cyan);
       ref.on('value', function(snapshot) {
-        var data = snapshot.val();
+        var data = snapshot.exportVal();
         grunt.file.write(output, JSON.stringify(data, null, 2));
         done();
       });
 
     });
- 
+
   };
 
   var live = function(task, options, done) {
@@ -131,7 +131,7 @@ module.exports = function(grunt) {
         ref.on('child_changed', function(snapshot) {
           var name = snapshot.name();
           grunt.log.writeln((name + ' was changed. Updating file with new data...').cyan);
-          var data = snapshot.val();
+          var data = snapshot.exportVal();
           var filepath = fileMapping[name];
           if(grunt.file.exists(filepath)) {
             grunt.file.write(filepath, JSON.stringify(data, null, 2));
@@ -145,7 +145,7 @@ module.exports = function(grunt) {
   };
 
   grunt.registerMultiTask('firebase', 'Update your firebase.', function() {
-    
+
     var task = this;
     var done = task.async();
 
