@@ -1,0 +1,80 @@
+{
+  "complex-object": {
+    "people": {
+      "0": {
+        "addresses": {
+          "0": {
+            "address1": "123 Main Street",
+            "address2": "A",
+            "city": "Sharonville",
+            "state": "OH",
+            "zip": "45241"
+          }
+        },
+        "name": {
+          "first": "Brian",
+          "last": "Woodward"
+        }
+      }
+    }
+  },
+  "issueList": {
+    "2": "2^1",
+    "4": "2^2",
+    "8": "2^3",
+    "16": "2^4"
+  },
+  "issueList2": {
+    "2": "foo",
+    "3": "bar",
+    "4": "baz"
+  },
+  "list": {
+    "0": "this",
+    "1": "is",
+    "2": "just",
+    "3": "a",
+    "4": "simple",
+    "5": "list",
+    "6": "adding"
+  },
+  "list-complex": {
+    "0": {
+      "one": "this"
+    },
+    "1": {
+      "two": "list"
+    },
+    "2": {
+      "three": "contains"
+    },
+    "3": {
+      "four": "objects"
+    }
+  },
+  "one": {
+    "foo": "bar"
+  },
+  "simple-object": {
+    "name": {
+      "first": "Brian",
+      "last": "Woodward"
+    }
+  },
+  "three": {
+    "0": "first",
+    "1": "second",
+    "2": "third"
+  },
+  "two": {
+    "0": {
+      "a": "A"
+    },
+    "1": {
+      "b": "B"
+    },
+    "2": {
+      "c": "C"
+    }
+  }
+}
