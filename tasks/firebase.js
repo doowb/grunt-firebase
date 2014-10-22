@@ -115,7 +115,7 @@ module.exports = function(grunt) {
       // for each file, setup live watching
       gaze(task.filesSrc, function(err, watcher) {
         if(err) {
-          grunt.warn('Error attempting to watch file: ' + filepath, err);
+          grunt.warn('Error attempting to watch file: ' + task.filesSrc, err);
           done(false);
         }
 
